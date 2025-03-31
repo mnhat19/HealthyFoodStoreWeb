@@ -1,0 +1,63 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Login - Organic Store{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Login</h4>
+                </div>
+                <div class="card-body">
+
+                    <!-- Hiển thị thông báo lỗi từ messages -->
+                    {% if messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    <!-- Hiển thị lỗi của form -->
+                    <!-- {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %} -->
+
+                    <form method="post" action="{% url 'store:login' %}" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control {% if messages %}is-invalid{% endif %}" id="username" name="username" value="{{ username|default:'' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control {% if messages %}is-invalid{% endif %}" id="password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{% url 'store:register' %}">Register here</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

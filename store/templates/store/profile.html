@@ -1,0 +1,61 @@
+{% extends 'store/base.html' %}
+
+{% load static %}
+
+{% block title %}Profile - Organic Store{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">My Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="fw-bold mb-0">Username:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0">{{ customer.user.username }}</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="fw-bold mb-0">Phone Number:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0">{{ customer.phone_number }}</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="fw-bold mb-0">Address:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0">{{ customer.address }}</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="fw-bold mb-0">Total Purchases:</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0">${{ customer.total_paid }}</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'store:edit_profile' %}" class="btn btn-primary me-2">Edit Profile</a>
+                        <!-- <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a> -->
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,215 @@
+Cấu trúc thư mục:
+food_store/
+├── store/              # Thư mục chứa code của ứng dụng chính
+│   ├── __init__.py   # Khởi tạo package
+│   ├── admin.py      # Định nghĩa các model trong admin interface
+│   ├── apps.py       # Cấu hình ứng dụng
+│   ├── migrations/   # Chứa các migration của database
+│   │   └── __init__.py
+│   ├── models.py     # Định nghĩa các model dữ liệu
+│   ├── templates/    # Chứa các template HTML
+│   │   └── app/      # Template của app
+│   │       ├── base.html       # Template gốc
+│   │       ├── home.html      # Trang chủ
+│   │       └── ...
+│   ├── urls.py       # Định nghĩa các URL của app
+│   └── views.py      # Định nghĩa các view (logic xử lý)
+├── food_sales/       # Thư mục chứa code của dự án (settings, urls, wsgi)
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py   # Cấu hình dự án
+│   ├── urls.py       # Định nghĩa các URL của dự án
+│   └── wsgi.py
+├── static/           # Chứa các file tĩnh (CSS, JavaScript, images)
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── script.js
+│   └── images/
+│       └── logo.png
+├── media/            # Chứa các file media (hình ảnh, video) được upload bởi người dùng
+├── manage.py         # File quản lý dự án (chạy server, tạo migrations, ...)
+└── requirements.txt  # Liệt kê các package cần thiết cho dự án
+
+
+
+
+
+
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <!-- Order Steps -->
+        <div class="col-12 mb-4">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="text-center mx-3">
+                    <div class="badge bg-primary rounded-circle p-3 mb-2">1</div>
+                    <div>Cart</div>
+                </div>
+                <div class="border-top flex-grow-1" style="max-width: 100px;"></div>
+                <div class="text-center mx-3">
+                    <div class="badge bg-primary rounded-circle p-3 mb-2">2</div>
+                    <div>Confirm</div>
+                </div>
+                <div class="border-top flex-grow-1" style="max-width: 100px;"></div>
+                <div class="text-center mx-3">
+                    <div class="badge bg-secondary rounded-circle p-3 mb-2">3</div>
+                    <div>Payment</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Confirm Information</h4>
+                </div>
+                <div class="card-body">
+                    <form id="customerForm" method="post" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{ customer.user.get_full_name }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       value="{{ customer.phone_number }}" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="address" class="form-label">Delivery Address</label>
+                                <textarea class="form-control" id="address" name="address" 
+                                          rows="3" required>{{ customer.address }}</textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="notes" class="form-label">Order Notes (Optional)</label>
+                                <textarea class="form-control" id="notes" name="notes" 
+                                          rows="2" placeholder="Special instructions for delivery"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-primary" id="confirmButton">
+                                Confirm Information
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="col-md-8" id="paymentSection" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Payment Method</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Order Summary -->
+                    <div class="mb-4">
+                        <h5>Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>${{ subtotal }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span>{% if subtotal >= 50 %}Free{% else %}$10.00{% endif %}</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong>Total:</strong>
+                            <strong>${{ total }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <form id="paymentForm" method="post" action="{% url 'store:payment' %}">
+                        {% csrf_token %}
+                        {% for method in payment_methods %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" 
+                                           id="payment{{ forloop.counter }}" value="{{ method.id }}"
+                                           {% if forloop.first %}checked{% endif %}>
+                                    <label class="form-check-label" for="payment{{ forloop.counter }}">
+                                        {{ method.name }}
+                                    </label>
+                                </div>
+                                <div class="payment-details mt-3" id="details{{ forloop.counter }}">
+                                    {% if method.account_number %}
+                                        <p class="mb-2">Account Number: {{ method.account_number }}</p>
+                                    {% endif %}
+                                    {% if method.qr_code %}
+                                        <img src="{{ method.qr_code.url }}" alt="QR Code" 
+                                             class="img-fluid" style="max-width: 200px;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-outline-secondary me-2" id="backButton">
+                                Back to Information
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Complete Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const customerForm = document.getElementById('customerForm');
+    const paymentSection = document.getElementById('paymentSection');
+    const confirmButton = document.getElementById('confirmButton');
+    const backButton = document.getElementById('backButton');
+
+    // Handle customer form submission
+    customerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        customerForm.parentElement.parentElement.style.display = 'none';
+        paymentSection.style.display = 'block';
+        
+        // Update progress steps
+        document.querySelectorAll('.badge')[2].classList.remove('bg-secondary');
+        document.querySelectorAll('.badge')[2].classList.add('bg-primary');
+    });
+
+    // Handle back button
+    backButton.addEventListener('click', function() {
+        customerForm.parentElement.parentElement.style.display = 'block';
+        paymentSection.style.display = 'none';
+        
+        // Update progress steps
+        document.querySelectorAll('.badge')[2].classList.remove('bg-primary');
+        document.querySelectorAll('.badge')[2].classList.add('bg-secondary');
+    });
+
+    // Show/hide payment details based on selection
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+    paymentMethods.forEach((method, index) => {
+        method.addEventListener('change', function() {
+            document.querySelectorAll('.payment-details').forEach(details => {
+                details.style.display = 'none';
+            });
+            document.getElementById(`details${index + 1}`).style.display = 'block';
+        });
+    });
+
+    // Show first payment method details by default
+    document.getElementById('details1').style.display = 'block';
+});
+</script>
+{% endblock %}

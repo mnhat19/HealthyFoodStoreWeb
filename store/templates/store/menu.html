@@ -1,0 +1,51 @@
+{% extends 'store/base.html' %}
+
+{% load static %}
+
+{% block title %}Menu - Organic Store{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Category Filter -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-center flex-wrap">
+                <a href="{% url 'store:menu' %}" class="btn btn-outline-primary m-1 {% if not request.GET.category %}active{% endif %}">
+                    All
+                </a>
+                {% for category_code, category_name in categories %}
+                <a href="{% url 'store:menu' %}?category={{ category_code }}" 
+                   class="btn btn-outline-primary m-1 {% if request.GET.category == category_code %}active{% endif %}">
+                    {{ category_name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm product-card">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                    <p class="fw-bold">${{ product.price }}</p>
+                    {% if product.stock > 0 %}
+                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>Sold Out</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>No products found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

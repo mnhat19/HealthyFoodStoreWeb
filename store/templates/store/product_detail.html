@@ -1,0 +1,79 @@
+{% extends 'store/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ product.name }} - Organic Store{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0">
+                <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+            </div>
+        </div>
+        
+        <!-- Product Information -->
+        <div class="col-md-6">
+            <h1 class="mb-3">{{ product.name }}</h1>
+            <p class="lead mb-4">{{ product.description }}</p>
+            
+            <!-- Ingredients -->
+            <div class="mb-4">
+                <h5>Ingredients:</h5>
+                <p>{{ product.ingredients }}</p>
+            </div>
+            
+            <!-- Price -->
+            <div class="mb-4">
+                <h3 class="text-primary">${{ product.price }}</h3>
+                {% if product.stock > 0 %}
+                    <span class="badge bg-success">
+                        In Stock ({{ product.stock }} available, {{ product.stock }} total)
+                    </span>
+                {% else %}
+                    <span class="badge bg-danger">Sold Out</span>
+                {% endif %}
+
+            </div>
+            
+            <!-- Add to Cart Form -->
+            {% if product.stock > 0 %}
+            <form method="post" action="{% url 'store:add_to_cart' product.id %}" class="mb-4">
+                {% csrf_token %}
+                <div class="input-group mb-3" style="max-width: 200px;">
+                    <span class="input-group-text">Quantity</span>
+                    {% load custom_filters %}
+                    {% with cart_item=cart_items|get_item:product.id %}
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" 
+                            max="{{ product.stock }}" {% if cart_item %}data-in-cart="{{ cart_item.quantity }}"{% endif %}>
+                    {% endwith %}
+
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Add to Cart</button>
+                <a href="{% url 'store:cart' %}" class="btn btn-outline-primary">View Cart</a>
+            </form>
+            {% endif %}
+            
+            {% if cart_items %}
+                {% for item in cart_items %}
+                    {% if item.product.id == product.id %}
+                        <p class="text-warning">You have already added {{ item.quantity }} of this item in your cart.</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- Category -->
+            <div class="mt-4">
+                <p class="mb-2">Category: 
+                    <a href="{% url 'store:menu' %}?category={{ product.category }}" class="text-decoration-none">
+                        {{ product.get_category_display }}
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

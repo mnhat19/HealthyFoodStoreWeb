@@ -1,0 +1,143 @@
+/* style.css */
+:root {
+    /* Scandinavian color palette */
+    --primary-color: #92c64e;
+    --secondary-color: #FBF9F1;
+    --accent-color: #4baf50;
+    --light-color: #eeeeee;
+    --dark-color: #333333;
+}
+
+/* General styles */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark-color);
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img {
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+/* Product cards */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #4baf50;
+    border-color: #4baf50;
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Hero section */
+.hero {
+    position: relative;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero > div {
+    z-index: 1;
+}
+
+/* Forms */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(152, 193, 217, 0.25);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    border-radius: 10px 10px 0 0 !important;
+}
+
+/* Footer */
+footer {
+    background-color: var(--light-color) !important;
+}
+
+/* Service icons */
+.bi {
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero {
+        height: 60vh !important;
+    }
+    
+    .product-card img {
+        height: 180px;
+    }
+}
+

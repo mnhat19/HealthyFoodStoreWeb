@@ -1,0 +1,133 @@
+{% extends 'store/base.html' %}
+
+{% load static %}
+
+{% block title %}About Us - Organic Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Video Background -->
+<section class="position-relative" style="height: 87vh; overflow: hidden;">
+    <video autoplay muted loop class="position-absolute w-100 h-100" style="object-fit: cover;">
+        <source src="{% static 'videos/about-hero.mp4' %}" type="video/mp4">
+    </video>
+    <div class="position-absolute w-100 h-100" style="background: rgba(0,0,0,0.5);"></div>
+    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+        <h1 class="display-4">Our Story</h1>
+        <p class="lead">Bringing organic goodness to your table since 2020</p>
+    </div>
+</section>
+
+<!-- Info Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Contact Information -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Contact Us</h3>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-geo-alt me-2"></i>Address</h6>
+                            <p>123 Organic Street<br>Eco City, EC 12345</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-telephone me-2"></i>Phone</h6>
+                            <p>(123) 456-7890</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-envelope me-2"></i>Email</h6>
+                            <p>info@organicstore.com</p>
+                        </div>
+                        <div class="mt-4">
+                            <h6>Follow Us</h6>
+                            <div class="d-flex gap-3">
+                                <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="text-primary fs-4"><i class="bi bi-tiktok"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Story Section -->
+            <div class="col-md-8">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Our Journey</h3>
+                        <p class="mb-4">Our story began with a simple belief: everyone deserves access to fresh, organic products that are both healthy and delicious. We partner with local farmers who share our commitment to sustainable agriculture and ethical practices.</p>
+                        
+                        <h5 class="mb-3">Our Process</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-1-circle me-2 text-primary"></i>
+                                    <div>
+                                        <h6>Careful Selection</h6>
+                                        <p class="small">We carefully select each product from trusted organic farms.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-2-circle me-2 text-primary"></i>
+                                    <div>
+                                        <h6>Quality Control</h6>
+                                        <p class="small">Each product undergoes strict quality checks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-3-circle me-2 text-primary"></i>
+                                    <div>
+                                        <h6>Sustainable Packaging</h6>
+                                        <p class="small">We use eco-friendly packaging materials.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-4-circle me-2 text-primary"></i>
+                                    <div>
+                                        <h6>Swift Delivery</h6>
+                                        <p class="small">Fast and reliable delivery to your doorstep.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Blog Links -->
+                        <h5 class="mb-3">Latest Articles</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card">
+                                        <img src="{% static 'images/blog-1.jpg' %}" class="card-img-top" alt="Healthy Eating">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Guide to Healthy Eating</h6>
+                                            <p class="small text-muted mb-0">Tips for maintaining a healthy diet</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card">
+                                        <img src="{% static 'images/blog-2.jpg' %}" class="card-img-top" alt="Weight Loss">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Natural Weight Loss</h6>
+                                            <p class="small text-muted mb-0">Achieve your goals with organic food</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

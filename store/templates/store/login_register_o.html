@@ -1,0 +1,93 @@
+{% extends 'store/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'login' %}
+        Login
+    {% else %}
+        Register
+    {% endif %}
+    - Organic Store
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        {% if request.resolver_match.url_name == 'login' %}Login{% else %}Register{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if request.resolver_match.url_name == 'login' %}
+                            <!-- Login Form -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                        {% else %}
+                            <!-- Register Form -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email (optional)</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password1" name="password1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password2" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="password2" name="password2" required>
+                            </div>
+                        {% endif %}
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <p class="mb-0">{{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            {% if request.resolver_match.url_name == 'login' %}Login{% else %}Register{% endif %}
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        {% if request.resolver_match.url_name == 'login' %}
+                            <p>Don't have an account? <a href="{% url 'store:register' %}">Register here</a></p>
+                        {% else %}
+                            <p>Already have an account? <a href="{% url 'store:login' %}">Login here</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

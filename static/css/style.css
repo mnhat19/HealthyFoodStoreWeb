@@ -153,3 +153,21 @@ footer {
     display: block;
     margin-top: 10px;
 }
+
+.text-truncate-3 {
+    /* Giải pháp cho các trình duyệt hỗ trợ Webkit */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    
+    /* Phiên bản tiêu chuẩn (đang phát triển) */
+    line-clamp: 3;
+    
+    /* Đảm bảo overflow hoạt động đúng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    /* Giải pháp dự phòng cho trình duyệt không hỗ trợ line-clamp */
+    max-height: 4.5em; /* 1.5em x 3 dòng */
+    line-height: 1.5em;
+}

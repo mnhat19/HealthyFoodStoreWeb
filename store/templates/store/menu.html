@@ -27,19 +27,29 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {% for product in products %}
         <div class="col">
-            <div class="card h-100 shadow-sm product-card">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description|truncatewords:15 }}</p>
-                    <p class="fw-bold">${{ product.price }}</p>
-                    {% if product.stock > 0 %}
-                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-primary">View Details</a>
-                    {% else %}
-                        <button class="btn btn-secondary" disabled>Sold Out</button>
-                    {% endif %}
+            {% if product.stock > 0 %}
+            <a href="{% url 'store:product_detail' product.id %}" class="text-decoration-none">
+            {% endif %}
+                <div class="card h-100 shadow-sm product-card {% if product.stock > 0 %}hover-card{% else %}opacity-75{% endif %}">
+                    <div style="height: 200px; overflow: hidden;">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="object-fit: cover; height: 100%; width: 100%;">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <div class="description-box">
+                            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        </div>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <p class="fw-bold mb-0">${{ product.price }}</p>
+                            {% if not product.stock > 0 %}
+                                <span class="badge bg-secondary">Sold Out</span>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% if product.stock > 0 %}
+            </a>
+            {% endif %}
         </div>
         {% empty %}
         <div class="col-12 text-center">
@@ -48,4 +58,35 @@
         {% endfor %}
     </div>
 </div>
+
+<style>
+    .hover-card {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .description-box {
+        height: 4.5em;         /* Height for about 3 lines of text */
+        margin-bottom: 15px;
+        overflow: hidden;
+        position: relative;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;  /* Show max 3 lines */
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+    }
+    
+    /* Remove the existing :after pseudo-element */
+    /*.description-box:after {
+        content: "...";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: white;
+        padding-left: 3px;
+    }*/
+</style>
 {% endblock %}
